@@ -1,0 +1,46 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(businessId) {
+      return isAuthenticated() && request.auth.uid == businessId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128;
+    }
+
+    // Business profile rules
+    match /businesses/{businessId} {
+      allow read: if true;
+      allow write: if isOwner(businessId);
+
+      // Sub-collections
+      match /services/{serviceId} {
+        allow read: if true;
+        allow write: if isOwner(businessId);
+      }
+
+      match /staff/{staffId} {
+        allow read: if true;
+        allow write: if isOwner(businessId);
+      }
+
+      match /appointments/{appointmentId} {
+        allow read: if true; // Allows customers and owners to read
+        allow create: if true; // Public booking
+        allow update, delete: if isOwner(businessId) || (request.resource.data.status == 'cancelled' && resource.data.customerEmail == request.auth.token.email);
+      }
+
+      match /customers/{customerId} {
+        allow read, create: if true;
+        allow update, delete: if isOwner(businessId);
+      }
+    }
+  }
+}

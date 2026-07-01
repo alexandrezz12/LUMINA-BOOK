@@ -1,0 +1,6 @@
+{
+  "name": "Luminabook",
+  "description": "A premium SaaS platform for service businesses to generate custom booking pages, schedule appointments, manage services and staff, and track analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
