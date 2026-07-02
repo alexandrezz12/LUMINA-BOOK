@@ -726,7 +726,7 @@ export default function DashboardView({ userId, userEmail, onSignOut }: Dashboar
     try {
       const staffData = {
         name: newStaffName,
-        email: "",
+        email: newStaffEmail || "",
         workingHours: newStaffWorkingDays,
         assignedServices: newStaffAssigned,
         createdAt: new Date().toISOString()
@@ -812,7 +812,7 @@ export default function DashboardView({ userId, userEmail, onSignOut }: Dashboar
     try {
       const updatedData = {
         name: editStaffName,
-        email: "",
+        email: editStaffEmail || "",
         workingHours: editStaffWorkingDays,
         assignedServices: editStaffAssigned,
       };

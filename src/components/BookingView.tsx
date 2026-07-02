@@ -651,7 +651,13 @@ export default function BookingView({ businessSlug, onBackToMain }: BookingViewP
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[350px] overflow-y-auto pr-1">
                   {staffList
                     // Filter staff that can perform selected service (or allow all if list empty)
-                    .filter(st => st.assignedServices?.length === 0 || st.assignedServices?.includes(selectedService?.id || ""))
+                    .filter(st => {
+                      const assigned = st.assignedServices;
+                      if (!assigned || !Array.isArray(assigned) || assigned.length === 0) {
+                        return true;
+                      }
+                      return assigned.includes(selectedService?.id || "");
+                    })
                     .map(st => (
                       <motion.div
                         key={st.id}
