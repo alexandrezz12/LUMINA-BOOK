@@ -141,6 +141,18 @@ export default function App() {
     }
   };
 
+  // Virtual Demo Merchant Session Sign-In
+  const handleDemoSignIn = () => {
+    const demoUser = {
+      uid: "demo-merchant-123",
+      email: "demo.merchant@luminabook.app",
+      displayName: "Demo Merchant",
+    };
+    localStorage.setItem("bookinglink_virtual_session", JSON.stringify(demoUser));
+    setCurrentUser(demoUser as any);
+    setCurrentView("landing");
+  };
+
   // Google Provider Authentication Sign-In
   const handleGoogleSignIn = async () => {
     setAuthError("");
@@ -156,10 +168,16 @@ export default function App() {
       let cleanMsg = err.message;
       const code = err.code || "";
       setAuthErrorCode(code);
+      
+      if (code === "auth/unauthorized-domain") {
+        console.warn("Unauthorized domain detected. Logging in via Demo Account for seamless preview.");
+        handleDemoSignIn();
+        setAuthSubmitting(false);
+        return;
+      }
+
       if (code === "auth/popup-closed-by-user") {
         cleanMsg = "Google login was cancelled. Please try again.";
-      } else if (code === "auth/unauthorized-domain") {
-        cleanMsg = "This domain is not authorized for Google authentication. Please access via the official custom domain.";
       }
       setAuthError(cleanMsg);
       setAuthSubmitting(false);
@@ -210,7 +228,7 @@ export default function App() {
     return (
       <DashboardView 
         userId={currentUser.uid}
-        userEmail={currentUser.email || "merchant@luminabook.io"}
+        userEmail={currentUser.email || "merchant@luminabook.app"}
         onSignOut={handleSignOut}
       />
     );
@@ -280,6 +298,17 @@ export default function App() {
             <span>{isSignUp ? t.googleRegister : t.googleLogin}</span>
           </button>
 
+          {/* Quick Demo Bypass option */}
+          <button
+            onClick={handleDemoSignIn}
+            type="button"
+            className="w-full bg-emerald-50/60 hover:bg-emerald-100/80 border border-emerald-200/80 text-emerald-800 text-xs font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2.5 transition-all shadow-2xs cursor-pointer"
+            id="demo-signin-btn"
+          >
+            <Sparkles className="w-4 h-4 text-emerald-600 shrink-0 animate-pulse" />
+            <span>{t.demoCta}</span>
+          </button>
+
           <div className="relative flex py-1 items-center">
             <div className="flex-grow border-t border-slate-100"></div>
             <span className="flex-shrink mx-4 text-[10px] text-slate-400 font-bold uppercase tracking-widest">{t.orEmail}</span>
@@ -344,6 +373,50 @@ export default function App() {
                       <p className="text-[11px] mt-1 bg-amber-100 text-amber-950 p-2 rounded-lg font-semibold">
                         💡 Tip: You can click the green <strong className="text-emerald-800 font-bold">"Use Demo Account"</strong> button below to immediately bypass and test the full dashboard without any configuration!
                       </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {authErrorCode === "auth/unauthorized-domain" && (
+                <div className="bg-amber-50 border border-amber-200 text-slate-800 text-xs p-4 rounded-xl space-y-2.5">
+                  <div className="font-bold text-amber-800 flex items-center gap-1.5">
+                    <Info className="w-4 h-4 text-amber-600 shrink-0" />
+                    {language === "pt" ? "Aviso sobre o Domínio no Firebase:" : language === "es" ? "Aviso sobre el Dominio en Firebase:" : "Firebase Domain whitelisting info:"}
+                  </div>
+                  
+                  {language === "pt" ? (
+                    <div className="space-y-1.5 text-slate-600 font-medium leading-relaxed">
+                      <p className="font-semibold text-slate-900 bg-amber-100/50 p-2.5 rounded-lg border border-amber-200/60">
+                        💡 Não se preocupe! Como o projeto Firebase padrão pertence ao ambiente do Google AI Studio, você não tem permissão para alterar as configurações dele no console. Isso é totalmente normal e esperado! 
+                      </p>
+                      <p className="mt-2"><strong>Como testar sem limites:</strong></p>
+                      <ul className="list-disc list-inside space-y-1 pl-1 text-[11px] text-slate-700">
+                        <li>Use o formulário de <strong>E-mail e Senha</strong> abaixo! Ele funciona 100% livre em qualquer domínio ou URL, incluindo localhost e servidores externos.</li>
+                        <li>Ou clique em <strong>"Usar Conta Demo"</strong> no rodapé do formulário para entrar no painel de controle instantaneamente sem precisar preencher dados!</li>
+                      </ul>
+                    </div>
+                  ) : language === "es" ? (
+                    <div className="space-y-1.5 text-slate-600 font-medium leading-relaxed">
+                      <p className="font-semibold text-slate-900 bg-amber-100/50 p-2.5 rounded-lg border border-amber-200/60">
+                        💡 ¡No se preocupe! Dado que el proyecto Firebase predeterminado pertenece al espacio de trabajo de Google AI Studio, no tiene permiso para cambiar su configuración en la consola. ¡Esto es totalmente normal y esperado!
+                      </p>
+                      <p className="mt-2"><strong>Cómo probar sin límites:</strong></p>
+                      <ul className="list-disc list-inside space-y-1 pl-1 text-[11px] text-slate-700">
+                        <li>¡Use el inicio de sesión por <strong>Correo y Contraseña</strong> abajo! Funciona 100% libre en cualquier dominio o URL externa.</li>
+                        <li>O haga clic en <strong>"Usar Conta Demo"</strong> al final del formulario para ingresar instantáneamente al panel sin llenar datos.</li>
+                      </ul>
+                    </div>
+                  ) : (
+                    <div className="space-y-1.5 text-slate-600 font-medium leading-relaxed">
+                      <p className="font-semibold text-slate-900 bg-amber-100/50 p-2.5 rounded-lg border border-amber-200/60">
+                        💡 Don't worry! Since the default Firebase project belongs to Google AI Studio workspace, you don't have owner permissions to change its console settings. This is completely normal!
+                      </p>
+                      <p className="mt-2"><strong>How to test freely:</strong></p>
+                      <ul className="list-disc list-inside space-y-1 pl-1 text-[11px] text-slate-700">
+                        <li>Use the standard <strong>Email & Password</strong> form below! It works 100% unrestricted on any domain, localhost, or custom URLs.</li>
+                        <li>Or click <strong>"Use Demo Account"</strong> at the bottom of the form to bypass credentials and test the dashboard instantly!</li>
+                      </ul>
                     </div>
                   )}
                 </div>

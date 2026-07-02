@@ -436,8 +436,8 @@ export default function DashboardView({ userId, userEmail, onSignOut }: Dashboar
         // If no staff, seed default professional staff
         if (staffListRes.length === 0) {
           const initialStaff = [
-            { name: "Alex Mercer", email: "alex@luminabook.io", workingHours: defaultWorkingHours, assignedServices: [], createdAt: new Date().toISOString() },
-            { name: "Elena Rostova", email: "elena@luminabook.io", workingHours: defaultWorkingHours, assignedServices: [], createdAt: new Date().toISOString() }
+            { name: "Alex Mercer", email: "alex@luminabook.app", workingHours: defaultWorkingHours, assignedServices: [], createdAt: new Date().toISOString() },
+            { name: "Elena Rostova", email: "elena@luminabook.app", workingHours: defaultWorkingHours, assignedServices: [], createdAt: new Date().toISOString() }
           ];
           const seededSt: Staff[] = [];
           for (const st of initialStaff) {
@@ -850,7 +850,7 @@ export default function DashboardView({ userId, userEmail, onSignOut }: Dashboar
   const copyBookingLink = () => {
     const slug = business?.slug || "sample-slug";
     // We construct path using hash-route pattern
-    const fullUrl = `${window.location.origin}${window.location.pathname}?b=${slug}`;
+    const fullUrl = `https://www.luminabook.app/?b=${slug}`;
     navigator.clipboard.writeText(fullUrl);
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 3000);
@@ -873,7 +873,7 @@ export default function DashboardView({ userId, userEmail, onSignOut }: Dashboar
   // Share booking templates
   const getShareLink = (platform: 'whatsapp' | 'email' | 'facebook' | 'sms') => {
     const slug = business?.slug || "sample-slug";
-    const fullUrl = encodeURIComponent(`${window.location.origin}${window.location.pathname}?b=${slug}`);
+    const fullUrl = encodeURIComponent(`https://www.luminabook.app/?b=${slug}`);
     const text = encodeURIComponent(`Hi there! You can now book your appointments online 24/7 with us. Schedule here: `);
     
     switch (platform) {
@@ -1110,7 +1110,7 @@ export default function DashboardView({ userId, userEmail, onSignOut }: Dashboar
               <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
                 <h4 className="text-[10px] uppercase font-bold tracking-wider text-slate-400">Your Booking Link</h4>
                 <div className="mt-2 text-xs truncate font-mono text-blue-600 bg-white border border-slate-200 p-2 rounded-lg">
-                  {window.location.host}{window.location.pathname}?b={business?.slug}
+                  www.luminabook.app/?b={business?.slug}
                 </div>
                 <button
                   onClick={copyBookingLink}
@@ -1295,7 +1295,7 @@ export default function DashboardView({ userId, userEmail, onSignOut }: Dashboar
             <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
               <h4 className="text-[10px] uppercase font-bold tracking-wider text-slate-400">Your Booking Link</h4>
               <div className="mt-2 text-xs truncate font-mono text-blue-600 bg-white border border-slate-200 p-2 rounded-lg">
-                {window.location.host}{window.location.pathname}?b={business?.slug}
+                www.luminabook.app/?b={business?.slug}
               </div>
               <button
                 onClick={copyBookingLink}
@@ -1562,7 +1562,7 @@ export default function DashboardView({ userId, userEmail, onSignOut }: Dashboar
                     <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-1">Custom Link Slug *</label>
                     <div className="flex rounded-lg overflow-hidden border border-gray-200">
                       <span className="bg-gray-100 px-3 py-2 text-xs text-gray-400 font-mono select-none flex items-center border-r border-gray-200 shrink-0">
-                        {window.location.host}{window.location.pathname}?b=
+                        www.luminabook.app/?b=
                       </span>
                       <input
                         type="text"
@@ -1711,7 +1711,7 @@ export default function DashboardView({ userId, userEmail, onSignOut }: Dashboar
                             <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">
                               Modelos Prontos (Clique para aplicar)
                             </label>
-                            <div className="grid grid-cols-4 gap-1.5">
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
                               {[
                                 { label: "Salão", url: "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80&w=120" },
                                 { label: "Barbeiro", url: "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&q=80&w=120" },
@@ -3268,7 +3268,7 @@ export default function DashboardView({ userId, userEmail, onSignOut }: Dashboar
                               <td className="p-4 font-mono text-blue-600">
                                 <span className="underline select-all">{biz.slug}</span>
                               </td>
-                              <td className="p-4 text-slate-600">{biz.ownerEmail || "merchant@luminabook.io"}</td>
+                              <td className="p-4 text-slate-600">{biz.ownerEmail || "merchant@luminabook.app"}</td>
                               <td className="p-4 text-slate-400 font-mono">
                                 {biz.createdAt ? new Date(biz.createdAt).toLocaleDateString() : "24/06/2026"}
                               </td>

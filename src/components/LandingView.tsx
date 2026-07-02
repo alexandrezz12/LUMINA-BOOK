@@ -155,42 +155,42 @@ export default function LandingView({ onGetStarted, onSignIn, language, setLangu
   ];
 
   return (
-    <div className="bg-white min-h-screen text-slate-900 font-sans" id="landing-page-container">
+    <div className="bg-[#FAF9F5] min-h-screen text-slate-900 font-sans" id="landing-page-container">
       {/* Navigation Header */}
-      <nav className="border-b border-slate-200 py-4 px-6 md:px-12 flex justify-between items-center bg-white sticky top-0 z-50">
-        <div className="flex items-center gap-2 cursor-pointer" onClick={() => window.location.reload()}>
-          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-lg">
+      <nav className="border-b border-slate-200/60 py-3.5 px-4 sm:px-6 md:px-12 flex justify-between items-center bg-[#FAF9F5]/90 backdrop-blur-md sticky top-0 z-50">
+        <div className="flex items-center gap-1.5 sm:gap-2 cursor-pointer" onClick={() => window.location.reload()}>
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-base sm:text-lg shrink-0">
             B
           </div>
-          <span className="font-bold text-lg tracking-tight text-slate-900 font-sans">{t.brand}</span>
+          <span className="font-bold text-base sm:text-lg tracking-tight text-slate-900 font-sans">{t.brand}</span>
         </div>
         
-        <div className="flex items-center gap-3 md:gap-6">
+        <div className="flex items-center gap-2 sm:gap-4 md:gap-6">
           {/* Header Language Switcher */}
-          <div className="flex items-center gap-1 bg-slate-50 border border-slate-200 rounded-full px-3 py-1.5 shadow-xs">
-            <Globe className="w-3.5 h-3.5 text-slate-500" />
+          <div className="flex items-center gap-1 bg-white border border-slate-200/80 rounded-full px-2 sm:px-3 py-1 sm:py-1.5 shadow-2xs">
+            <Globe className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-500 shrink-0" />
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value as Language)}
-              className="text-xs font-semibold text-slate-700 bg-transparent focus:outline-none cursor-pointer"
+              className="text-[10px] sm:text-xs font-semibold text-slate-700 bg-transparent focus:outline-none cursor-pointer"
             >
-              <option value="en">EN 🇺🇸</option>
-              <option value="pt">PT 🇧🇷</option>
-              <option value="es">ES 🇪🇸</option>
+              <option value="en">EN</option>
+              <option value="pt">PT</option>
+              <option value="es">ES</option>
             </select>
           </div>
 
           <button 
             id="nav-signin-btn"
             onClick={onSignIn}
-            className="text-sm font-semibold text-slate-600 hover:text-slate-950 transition-colors"
+            className="text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-950 transition-colors px-1 sm:px-2 py-1 shrink-0"
           >
             {t.signIn}
           </button>
           <button 
             id="nav-trial-btn"
             onClick={onGetStarted}
-            className="text-sm font-semibold bg-blue-600 text-white px-4 py-2 md:px-5 md:py-2.5 rounded-lg hover:bg-blue-700 transition-colors shadow-xs"
+            className="hidden sm:inline-flex text-xs sm:text-sm font-semibold bg-indigo-600 text-white px-3 py-1.5 sm:px-5 sm:py-2 rounded-full hover:bg-indigo-700 hover:scale-102 transition-all shadow-2xs shrink-0"
           >
             {t.startTrial}
           </button>
@@ -198,14 +198,14 @@ export default function LandingView({ onGetStarted, onSignIn, language, setLangu
       </nav>
 
       {/* Hero Section */}
-      <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto text-center animate-fade-in" id="landing-hero">
+      <section className="py-12 sm:py-20 md:py-24 px-4 sm:px-6 md:px-12 max-w-7xl mx-auto text-center animate-fade-in" id="landing-hero">
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-800 mb-6"
+          className="inline-flex items-center gap-1.5 bg-indigo-50 border border-indigo-100 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-semibold text-indigo-800 mb-4 sm:mb-6"
         >
-          <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+          <Sparkles className="w-3.5 h-3.5 text-indigo-600 animate-pulse" />
           <span>{t.heroBadge}</span>
         </motion.div>
 
@@ -213,18 +213,18 @@ export default function LandingView({ onGetStarted, onSignIn, language, setLangu
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-4xl md:text-6xl font-bold tracking-tight text-slate-900 max-w-4xl mx-auto leading-tight"
+          className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight text-slate-900 max-w-4xl mx-auto leading-tight"
           id="hero-heading"
         >
           {t.heroHeading} <br />
-          <span className="text-blue-600 font-extrabold">{t.heroHeadingSub}</span>
+          <span className="text-indigo-600 font-extrabold">{t.heroHeadingSub}</span>
         </motion.h1>
 
         <motion.p 
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-lg md:text-xl text-slate-500 mt-6 max-w-2xl mx-auto leading-relaxed"
+          className="text-sm sm:text-lg md:text-xl text-slate-500 mt-4 sm:mt-6 max-w-2xl mx-auto leading-relaxed"
           id="hero-subheading"
         >
           {t.heroDesc}
@@ -236,20 +236,24 @@ export default function LandingView({ onGetStarted, onSignIn, language, setLangu
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-10 flex flex-col sm:flex-row justify-center items-center gap-4"
         >
-          <button
+          <motion.button
             id="hero-cta-btn"
             onClick={onGetStarted}
-            className="w-full sm:w-auto bg-blue-600 text-white hover:bg-blue-700 text-base font-semibold px-8 py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-md hover:translate-y-[-1px]"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full sm:w-auto bg-indigo-600 text-white hover:bg-indigo-700 text-base font-semibold px-8 py-4 rounded-full flex items-center justify-center gap-2 transition-all shadow-md"
           >
             {t.heroCta} <ArrowRight className="w-5 h-5" />
-          </button>
-          <button
+          </motion.button>
+          <motion.button
             id="hero-demo-btn"
             onClick={onSignIn}
-            className="w-full sm:w-auto bg-white text-slate-700 border border-slate-200 hover:border-slate-350 hover:text-slate-900 text-base font-semibold px-8 py-4 rounded-xl flex items-center justify-center gap-2 transition-all"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full sm:w-auto bg-white text-slate-700 border border-slate-200 hover:border-slate-350 hover:text-slate-900 text-base font-semibold px-8 py-4 rounded-full flex items-center justify-center gap-2 transition-all"
           >
             <Play className="w-4 h-4 text-slate-600 fill-slate-600" /> {t.heroDemo}
-          </button>
+          </motion.button>
         </motion.div>
 
         {/* Dashboard Mock Preview */}
@@ -264,7 +268,7 @@ export default function LandingView({ onGetStarted, onSignIn, language, setLangu
             <div className="w-2.5 h-2.5 rounded-full bg-yellow-400"></div>
             <div className="w-2.5 h-2.5 rounded-full bg-green-400"></div>
             <div className="bg-slate-50 border border-slate-200 rounded-md text-[10px] px-4 py-0.5 ml-4 text-slate-400 w-1/2 text-left truncate">
-              {window.location.protocol}//{window.location.host}?b=aesthetic-clinic
+              www.luminabook.app/?b=aesthetic-clinic
             </div>
           </div>
           <div className="pt-10 grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
@@ -318,9 +322,9 @@ export default function LandingView({ onGetStarted, onSignIn, language, setLangu
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {features.map((feat, i) => (
-            <div key={i} className="border border-slate-100 rounded-2xl p-6 hover:shadow-xs hover:border-slate-300 transition-all bg-white flex flex-col justify-between">
+            <div key={i} className="border border-slate-150 rounded-2xl p-6 hover:shadow-xs hover:border-slate-300 transition-all bg-white flex flex-col justify-between">
               <div>
-                <div className="w-10 h-10 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center mb-4 text-blue-600">
+                <div className="w-10 h-10 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center justify-center mb-4 text-indigo-600">
                   {feat.icon}
                 </div>
                 <h3 className="font-semibold text-lg text-slate-900">{feat.title}</h3>
@@ -371,12 +375,12 @@ export default function LandingView({ onGetStarted, onSignIn, language, setLangu
               key={i} 
               className={`rounded-2xl p-8 border ${
                 plan.popular 
-                  ? "border-blue-600 shadow-md bg-white relative md:-translate-y-2" 
+                  ? "border-indigo-600 shadow-md bg-white relative md:-translate-y-2" 
                   : "border-slate-200 bg-white"
               }`}
             >
               {plan.popular && (
-                <div className="absolute -top-3.5 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
+                <div className="absolute -top-3.5 left-1/2 transform -translate-x-1/2 bg-indigo-600 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">
                   {language === "pt" ? "Mais Popular" : "Most Popular"}
                 </div>
               )}
@@ -388,16 +392,18 @@ export default function LandingView({ onGetStarted, onSignIn, language, setLangu
                 <span className="text-slate-500 text-sm font-medium"> {language === "pt" ? "/ mês" : "/ month"}</span>
               </div>
 
-              <button
+              <motion.button
                 onClick={onGetStarted}
-                className={`w-full py-3 rounded-xl font-semibold text-sm transition-all mb-8 ${
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className={`w-full py-3 rounded-full font-semibold text-sm transition-all mb-8 ${
                   plan.popular 
-                    ? "bg-blue-600 text-white hover:bg-blue-700" 
+                    ? "bg-indigo-600 text-white hover:bg-indigo-700" 
                     : "bg-slate-50 text-slate-800 hover:bg-slate-100 border border-slate-200"
                 }`}
               >
                 {plan.cta}
-              </button>
+              </motion.button>
 
               <div className="space-y-3.5">
                 <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">{language === "pt" ? "Recursos inclusos:" : "Features included:"}</div>
@@ -434,7 +440,7 @@ export default function LandingView({ onGetStarted, onSignIn, language, setLangu
                   <span>{faq.q}</span>
                   <ChevronRight 
                     className={`w-5 h-5 text-slate-400 transform transition-transform ${
-                      activeFaq === i ? "rotate-90 text-blue-600" : ""
+                      activeFaq === i ? "rotate-90 text-indigo-600" : ""
                     }`} 
                   />
                 </button>
@@ -454,12 +460,14 @@ export default function LandingView({ onGetStarted, onSignIn, language, setLangu
         <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900">{t.footerHeading}</h2>
         <p className="text-slate-500 mt-4 max-w-xl mx-auto">{t.footerSub}</p>
         <div className="mt-8">
-          <button 
+          <motion.button 
             onClick={onGetStarted}
-            className="bg-blue-600 text-white hover:bg-blue-700 font-semibold px-8 py-4 rounded-xl inline-flex items-center gap-2 transition-all shadow-md"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="bg-indigo-600 text-white hover:bg-indigo-700 font-semibold px-8 py-4 rounded-full inline-flex items-center gap-2 transition-all shadow-md"
           >
             {t.startTrial} <ArrowRight className="w-5 h-5" />
-          </button>
+          </motion.button>
         </div>
         <div className="text-xs text-slate-400 mt-4">{t.footerTrialNote}</div>
       </section>

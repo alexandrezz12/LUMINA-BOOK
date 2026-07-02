@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { 
   Calendar as CalendarIcon, 
   Clock, 
@@ -253,7 +254,7 @@ export default function BookingView({ businessSlug, onBackToMain }: BookingViewP
     setPaymentLoading(true);
 
     try {
-      const finalEmail = customerEmail.trim() || `${customerPhone.replace(/[^0-9]/g, "") || "no-phone"}@luminabook.io`;
+      const finalEmail = customerEmail.trim() || `${customerPhone.replace(/[^0-9]/g, "") || "no-phone"}@luminabook.app`;
       
       // Calculate amount to pay - online payments disabled per user request (only pay at venue)
       const finalAmount = 0; 
@@ -427,13 +428,13 @@ export default function BookingView({ businessSlug, onBackToMain }: BookingViewP
   const brandBg = business.brandColor || "#2563EB";
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] py-4 md:py-12 px-4 md:px-6 font-sans flex flex-col justify-between" id="booking-wizard-wrapper">
+    <div className="min-h-screen bg-gradient-to-tr from-[#FAF9F5] via-[#F4F4F6] to-[#FAF9F5] py-4 md:py-12 px-4 md:px-6 font-sans flex flex-col justify-between" id="booking-wizard-wrapper">
       {/* Top utility bar (Language selection) */}
       <div className="max-w-4xl mx-auto w-full flex justify-between items-center mb-4 px-2">
         <div />
         
         {/* Language switcher */}
-        <div className="flex gap-1.5 items-center bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-2xs">
+        <div className="flex gap-1.5 items-center bg-white px-2.5 py-1.5 rounded-lg border border-slate-200/80 shadow-2xs">
           <Globe className="w-3.5 h-3.5 text-slate-400" />
           <button 
             onClick={() => setLanguage('pt')} 
@@ -578,8 +579,16 @@ export default function BookingView({ businessSlug, onBackToMain }: BookingViewP
 
           {/* STEP 1: SELECT SERVICE */}
           {step === 1 && (
-            <div>
-              <h2 className="text-lg font-bold text-gray-900 mb-1">{translations[language].booking.selectService}</h2>
+            <motion.div
+              key="step-1"
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+            >
+              <h2 className="text-lg font-bold text-gray-900 mb-1 flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-amber-500 animate-pulse" />
+                {translations[language].booking.selectService}
+              </h2>
               <p className="text-xs text-gray-500 mb-4">{translations[language].booking.selectServiceDesc}</p>
 
               {services.length === 0 ? (
@@ -589,41 +598,48 @@ export default function BookingView({ businessSlug, onBackToMain }: BookingViewP
               ) : (
                 <div className="space-y-2.5 max-h-[350px] overflow-y-auto pr-1">
                   {services.map(srv => (
-                    <div
+                    <motion.div
                       key={srv.id}
                       id={`srv-option-${srv.id}`}
                       onClick={() => setSelectedService(srv)}
+                      whileHover={{ scale: 1.005, y: -0.5 }}
+                      whileTap={{ scale: 0.995 }}
                       className={`p-3.5 rounded-xl border cursor-pointer transition-all flex justify-between items-center ${
                         selectedService?.id === srv.id
-                          ? "border-black bg-gray-50"
-                          : "border-gray-200 hover:border-gray-300"
+                          ? "border-black bg-gray-50/70 shadow-sm"
+                          : "border-gray-200 hover:border-gray-300 hover:bg-slate-50/50"
                       }`}
                     >
                       <div className="flex-1 pr-4">
                         <div className="font-semibold text-sm text-gray-900">{srv.name}</div>
-                        <div className="text-xs text-gray-500 mt-0.5 leading-relaxed truncate max-w-[280px]">{srv.description}</div>
+                        <div className="text-xs text-gray-500 mt-0.5 leading-relaxed line-clamp-3 md:line-clamp-none">{srv.description}</div>
                         <div className="flex gap-2.5 items-center mt-2">
                           <span className="inline-flex items-center gap-1 text-[10px] bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded font-medium">
                             <Clock className="w-3 h-3" /> {srv.duration} {translations[language].booking.duration}
                           </span>
                         </div>
                       </div>
-                      <div className="text-right">
+                      <div className="text-right shrink-0">
                         <div className="font-bold text-base text-gray-900">${srv.price}</div>
                         {selectedService?.id === srv.id && (
                           <span className="text-[10px] text-emerald-600 font-semibold mt-1 block">✓ {translations[language].booking.selected}</span>
                         )}
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               )}
-            </div>
+            </motion.div>
           )}
 
           {/* STEP 2: SELECT STAFF MEMBER */}
           {step === 2 && (
-            <div>
+            <motion.div
+              key="step-2"
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+            >
               <h2 className="text-lg font-bold text-gray-900 mb-1">{translations[language].booking.selectStaff}</h2>
               <p className="text-xs text-gray-500 mb-4">{translations[language].booking.selectStaffDesc}</p>
 
@@ -637,45 +653,52 @@ export default function BookingView({ businessSlug, onBackToMain }: BookingViewP
                     // Filter staff that can perform selected service (or allow all if list empty)
                     .filter(st => st.assignedServices?.length === 0 || st.assignedServices?.includes(selectedService?.id || ""))
                     .map(st => (
-                      <div
+                      <motion.div
                         key={st.id}
                         id={`staff-option-${st.id}`}
                         onClick={() => setSelectedStaff(st)}
+                        whileHover={{ scale: 1.01 }}
+                        whileTap={{ scale: 0.99 }}
                         className={`p-4 rounded-xl border cursor-pointer transition-all flex items-center gap-3 ${
                           selectedStaff?.id === st.id
-                            ? "border-black bg-gray-50"
-                            : "border-gray-200 hover:border-gray-300"
+                            ? "border-black bg-gray-50/70 shadow-sm"
+                            : "border-gray-200 hover:border-gray-300 hover:bg-slate-50/50"
                         }`}
                       >
-                        <div className="w-10 h-10 rounded-full bg-gray-100 text-gray-700 font-semibold flex items-center justify-center text-sm border border-gray-200">
+                        <div className="w-10 h-10 rounded-full bg-slate-100 text-slate-700 font-semibold flex items-center justify-center text-sm border border-slate-200 shrink-0">
                           {st.name[0]}
                         </div>
-                        <div className="flex-1">
-                          <div className="font-semibold text-xs text-gray-900">{st.name}</div>
-                          <div className="text-[10px] text-gray-400">
+                        <div className="flex-1 min-w-0">
+                          <div className="font-semibold text-xs text-gray-900 truncate">{st.name}</div>
+                          <div className="text-[10px] text-gray-400 truncate">
                             {language === 'pt' ? 'Especialista Profissional' : language === 'es' ? 'Especialista Profesional' : 'Professional Specialist'}
                           </div>
                           {selectedStaff?.id === st.id && (
                             <span className="text-[9px] text-emerald-600 font-bold block mt-0.5">✓ {translations[language].booking.selected}</span>
                           )}
                         </div>
-                      </div>
+                      </motion.div>
                     ))}
                 </div>
               )}
-            </div>
+            </motion.div>
           )}
 
           {/* STEP 3: DATE & TIME SELECTOR */}
           {step === 3 && (
-            <div>
+            <motion.div
+              key="step-3"
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+            >
               <h2 className="text-lg font-bold text-gray-900 mb-1">{translations[language].booking.pickDateTime}</h2>
               <p className="text-xs text-gray-500 mb-4">{translations[language].booking.pickDateTimeDesc}</p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Date Input Column */}
                 <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">{translations[language].booking.dateLabel}</label>
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">{translations[language].booking.dateLabel}</label>
                   <input
                     type="date"
                     id="booking-date-input"
@@ -685,13 +708,13 @@ export default function BookingView({ businessSlug, onBackToMain }: BookingViewP
                       setSelectedDate(e.target.value);
                       setSelectedTime(""); // reset time when date changes
                     }}
-                    className="w-full bg-white border border-gray-200 rounded-xl p-3 text-sm font-medium focus:border-black focus:outline-none"
+                    className="w-full bg-white border border-gray-200 rounded-xl p-3 text-sm font-medium focus:border-black focus:ring-1 focus:ring-black focus:outline-none transition-all shadow-2xs"
                   />
                 </div>
 
                 {/* Slots Column */}
                 <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-400 mb-1.5">{translations[language].booking.slotsLabel}</label>
+                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">{translations[language].booking.slotsLabel}</label>
                   {availableSlots.length === 0 ? (
                     <div className="text-center py-6 border border-dashed border-gray-100 rounded-xl text-xs text-gray-400">
                       {translations[language].booking.noSlots}
@@ -699,91 +722,114 @@ export default function BookingView({ businessSlug, onBackToMain }: BookingViewP
                   ) : (
                     <div className="grid grid-cols-3 gap-1.5 max-h-[220px] overflow-y-auto pr-1">
                       {availableSlots.map(slot => (
-                        <button
+                        <motion.button
                           key={slot}
                           type="button"
                           id={`time-slot-${slot.replace(':', '-')}`}
                           onClick={() => setSelectedTime(slot)}
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
                           className={`py-2 rounded-lg text-xs font-semibold transition-all border ${
                             selectedTime === slot
                               ? "bg-black text-white border-black shadow-xs"
-                              : "bg-white text-gray-800 border-gray-200 hover:border-gray-400"
+                              : "bg-white text-slate-800 border-gray-200 hover:border-gray-400 hover:bg-slate-50/50"
                           }`}
                         >
                           {slot}
-                        </button>
+                        </motion.button>
                       ))}
                     </div>
                   )}
                 </div>
               </div>
-            </div>
+            </motion.div>
           )}
 
           {/* STEP 4: CONTACT INFO */}
           {step === 4 && (
-            <form onSubmit={handleBookingSubmit} id="booking-info-payment-form" className="max-w-md mx-auto w-full space-y-4">
-              <div>
-                <h2 className="text-lg font-bold text-gray-900 mb-1">{translations[language].booking.confirmBooking}</h2>
-                <p className="text-xs text-gray-500 mb-4">{translations[language].booking.confirmBookingDesc}</p>
-              </div>
-
-              <div className="space-y-3.5">
+            <motion.div
+              key="step-4"
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+            >
+              <form onSubmit={handleBookingSubmit} id="booking-info-payment-form" className="max-w-md mx-auto w-full space-y-4">
                 <div>
-                  <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">{translations[language].booking.fullName}</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Jane Doe"
-                    value={customerName}
-                    onChange={(e) => setCustomerName(e.target.value)}
-                    className="w-full bg-white border border-gray-200 rounded-lg p-3 text-xs font-medium focus:border-black focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">{translations[language].booking.phone}</label>
-                  <input
-                    type="tel"
-                    required
-                    placeholder={language === 'pt' ? "(11) 99999-9999" : language === 'es' ? "+34 600 000 000" : "+1 (555) 000-0000"}
-                    value={customerPhone}
-                    onChange={(e) => setCustomerPhone(e.target.value)}
-                    className="w-full bg-white border border-gray-200 rounded-lg p-3 text-xs font-medium focus:border-black focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">{translations[language].booking.notes}</label>
-                  <textarea
-                    placeholder={translations[language].booking.notesPlaceholder}
-                    value={customerNotes}
-                    onChange={(e) => setCustomerNotes(e.target.value)}
-                    className="w-full bg-white border border-gray-200 rounded-lg p-3 text-xs font-medium focus:border-black focus:outline-none h-16 resize-none"
-                  />
+                  <h2 className="text-lg font-bold text-gray-900 mb-1">{translations[language].booking.confirmBooking}</h2>
+                  <p className="text-xs text-gray-500 mb-4">{translations[language].booking.confirmBookingDesc}</p>
                 </div>
 
-                <button
-                  type="submit"
-                  id="submit-booking-action-btn"
-                  disabled={paymentLoading}
-                  className="w-full text-white bg-black hover:bg-gray-800 text-xs font-bold py-3 rounded-lg mt-4 flex items-center justify-center gap-1.5 transition-all disabled:bg-gray-400 cursor-pointer shadow-xs"
-                >
-                  {paymentLoading ? (
-                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  ) : (
-                    <>{translations[language].booking.scheduleButton}</>
-                  )}
-                </button>
-              </div>
-            </form>
+                <div className="space-y-3.5">
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">{translations[language].booking.fullName}</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Jane Doe"
+                      value={customerName}
+                      onChange={(e) => setCustomerName(e.target.value)}
+                      className="w-full bg-white border border-gray-200 rounded-lg p-3 text-xs font-medium focus:border-black focus:ring-1 focus:ring-black focus:outline-none transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">{translations[language].booking.phone}</label>
+                    <input
+                      type="tel"
+                      required
+                      placeholder={language === 'pt' ? "(11) 99999-9999" : language === 'es' ? "+34 600 000 000" : "+1 (555) 000-0000"}
+                      value={customerPhone}
+                      onChange={(e) => setCustomerPhone(e.target.value)}
+                      className="w-full bg-white border border-gray-200 rounded-lg p-3 text-xs font-medium focus:border-black focus:ring-1 focus:ring-black focus:outline-none transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">{translations[language].booking.notes}</label>
+                    <textarea
+                      placeholder={translations[language].booking.notesPlaceholder}
+                      value={customerNotes}
+                      onChange={(e) => setCustomerNotes(e.target.value)}
+                      className="w-full bg-white border border-gray-200 rounded-lg p-3 text-xs font-medium focus:border-black focus:ring-1 focus:ring-black focus:outline-none transition-all h-16 resize-none"
+                    />
+                  </div>
+
+                  <motion.button
+                    type="submit"
+                    id="submit-booking-action-btn"
+                    disabled={paymentLoading}
+                    whileHover={{ scale: 1.01 }}
+                    whileTap={{ scale: 0.99 }}
+                    className="w-full text-white bg-black hover:bg-slate-800 text-xs font-bold py-3 rounded-lg mt-4 flex items-center justify-center gap-1.5 transition-all disabled:bg-slate-400 cursor-pointer shadow-sm"
+                  >
+                    {paymentLoading ? (
+                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <>{translations[language].booking.scheduleButton}</>
+                    )}
+                  </motion.button>
+                </div>
+              </form>
+            </motion.div>
           )}
 
           {/* STEP 5: SUCCESS CONFIRMATION */}
           {step === 5 && (
-            <div className="text-center py-6 flex flex-col justify-between h-full" id="booking-success-container">
+            <motion.div
+              key="step-5"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="text-center py-6 flex flex-col justify-between h-full"
+              id="booking-success-container"
+            >
               <div>
-                <div className="w-16 h-16 bg-emerald-50 border border-emerald-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                <motion.div 
+                  initial={{ scale: 0.8, rotate: -10 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ delay: 0.15, type: "spring", stiffness: 200 }}
+                  className="w-16 h-16 bg-emerald-50 border border-emerald-200 rounded-full flex items-center justify-center mx-auto mb-4"
+                >
                   <Check className="w-8 h-8 text-emerald-600" />
-                </div>
+                </motion.div>
                 <h2 className="text-2xl font-black text-gray-900 leading-tight">{translations[language].booking.successTitle}</h2>
                 <p className="text-xs text-slate-500 mt-2 max-w-md mx-auto">
                   {language === 'pt' ? (
@@ -802,36 +848,38 @@ export default function BookingView({ businessSlug, onBackToMain }: BookingViewP
                 </p>
 
                 {/* Notification receipt message */}
-                <div className="mt-4 inline-flex items-center gap-1.5 bg-gray-50 border border-gray-200 rounded-full px-4 py-1.5 text-xs text-slate-700">
+                <div className="mt-4 inline-flex items-center gap-1.5 bg-emerald-50/40 border border-emerald-100/80 rounded-full px-4 py-1.5 text-xs text-emerald-800 font-medium">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   <span>{translations[language].booking.receiptPhone} <strong>{customerPhone}</strong></span>
                 </div>
 
                 {/* Reset & Book Another Appointment Button */}
                 <div className="mt-6 pt-2">
-                  <button
+                  <motion.button
                     onClick={handleReset}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     className="bg-black hover:bg-slate-800 text-white text-xs font-bold py-2.5 px-6 rounded-xl transition-all cursor-pointer shadow-xs"
                   >
                     {translations[language].booking.scheduleAnother}
-                  </button>
+                  </motion.button>
                 </div>
 
                 {/* Calendar buttons */}
                 <div className="mt-8 border-t border-slate-100 pt-6">
                   <h4 className="text-[10px] uppercase tracking-wider font-bold text-slate-400 mb-3">{translations[language].booking.addToCalendar}</h4>
-                  <div className="flex justify-center gap-3">
+                  <div className="flex flex-col sm:flex-row justify-center gap-2.5 sm:gap-3">
                     <button
                       onClick={() => handleCalendarSync('google')}
                       id="google-cal-sync-btn"
-                      className="inline-flex items-center gap-1.5 bg-white border border-slate-200 px-4 py-2 rounded-lg text-xs font-semibold hover:border-slate-400 hover:bg-slate-50 transition-all shadow-xs"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 bg-white border border-slate-200 px-4 py-2.5 sm:py-2 rounded-lg text-xs font-semibold hover:border-slate-400 hover:bg-slate-50 transition-all shadow-xs"
                     >
                       <CalendarDays className="w-4 h-4 text-blue-600" /> Google Calendar
                     </button>
                     <button
                       onClick={() => handleCalendarSync('outlook')}
                       id="outlook-cal-sync-btn"
-                      className="inline-flex items-center gap-1.5 bg-white border border-slate-200 px-4 py-2 rounded-lg text-xs font-semibold hover:border-slate-400 hover:bg-slate-50 transition-all shadow-xs"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 bg-white border border-slate-200 px-4 py-2.5 sm:py-2 rounded-lg text-xs font-semibold hover:border-slate-400 hover:bg-slate-50 transition-all shadow-xs"
                     >
                       <CalendarDays className="w-4 h-4 text-red-500" /> Outlook Calendar
                     </button>
@@ -855,7 +903,7 @@ export default function BookingView({ businessSlug, onBackToMain }: BookingViewP
                   </button>
                 </div>
               )}
-            </div>
+            </motion.div>
           )}
 
           {/* Action Footer Buttons */}
