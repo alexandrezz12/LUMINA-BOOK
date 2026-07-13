@@ -36,9 +36,9 @@ interface BookingViewProps {
 export default function BookingView({ businessSlug, onBackToMain }: BookingViewProps) {
   const [loading, setLoading] = useState(true);
   const [language, setLanguage] = useState<Language>(() => {
-    const browserLang = navigator.language || "";
-    if (browserLang.startsWith("pt")) return "pt";
+    const browserLang = (navigator.language || "").toLowerCase();
     if (browserLang.startsWith("es")) return "es";
+    if (browserLang.startsWith("pt")) return "es"; // Fallback Portuguese to Spanish
     return "en";
   });
   const [business, setBusiness] = useState<Business | null>(null);
@@ -94,7 +94,7 @@ export default function BookingView({ businessSlug, onBackToMain }: BookingViewP
 
         setBusiness(bData);
         if (bData.defaultLanguage) {
-          setLanguage(bData.defaultLanguage);
+          setLanguage(bData.defaultLanguage === "es" ? "es" : "en");
         }
 
         // Step 2: Fetch Services (enabled only)
@@ -436,12 +436,6 @@ export default function BookingView({ businessSlug, onBackToMain }: BookingViewP
         {/* Language switcher */}
         <div className="flex gap-1.5 items-center bg-white px-2.5 py-1.5 rounded-lg border border-slate-200/80 shadow-2xs">
           <Globe className="w-3.5 h-3.5 text-slate-400" />
-          <button 
-            onClick={() => setLanguage('pt')} 
-            className={`text-xs font-semibold px-1.5 py-0.5 rounded transition-all ${language === 'pt' ? 'bg-black text-white' : 'text-slate-600 hover:text-slate-900'}`}
-          >
-            PT
-          </button>
           <button 
             onClick={() => setLanguage('es')} 
             className={`text-xs font-semibold px-1.5 py-0.5 rounded transition-all ${language === 'es' ? 'bg-black text-white' : 'text-slate-600 hover:text-slate-900'}`}

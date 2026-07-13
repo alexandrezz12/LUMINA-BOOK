@@ -22,16 +22,16 @@ export default function App() {
   // Language State (SaaS Landing & Admin)
   const [language, setLanguageState] = useState<Language>(() => {
     const saved = localStorage.getItem("bookinglink_lang") as Language;
-    if (saved && (saved === "en" || saved === "pt" || saved === "es")) {
+    if (saved && (saved === "en" || saved === "es")) {
       return saved;
     }
     // Auto-detect browser language
-    const browserLang = navigator.language || "";
-    if (browserLang.startsWith("pt")) {
-      return "pt";
-    }
+    const browserLang = (navigator.language || "").toLowerCase();
     if (browserLang.startsWith("es")) {
       return "es";
+    }
+    if (browserLang.startsWith("pt")) {
+      return "es"; // Fallback Portuguese to Spanish
     }
     return "en";
   });
@@ -298,17 +298,6 @@ export default function App() {
             <span>{isSignUp ? t.googleRegister : t.googleLogin}</span>
           </button>
 
-          {/* Quick Demo Bypass option */}
-          <button
-            onClick={handleDemoSignIn}
-            type="button"
-            className="w-full bg-emerald-50/60 hover:bg-emerald-100/80 border border-emerald-200/80 text-emerald-800 text-xs font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2.5 transition-all shadow-2xs cursor-pointer"
-            id="demo-signin-btn"
-          >
-            <Sparkles className="w-4 h-4 text-emerald-600 shrink-0 animate-pulse" />
-            <span>{t.demoCta}</span>
-          </button>
-
           <div className="relative flex py-1 items-center">
             <div className="flex-grow border-t border-slate-100"></div>
             <span className="flex-shrink mx-4 text-[10px] text-slate-400 font-bold uppercase tracking-widest">{t.orEmail}</span>
@@ -340,9 +329,6 @@ export default function App() {
                         <li>Selecione <strong>E-mail/Senha</strong>, ative a opção e clique em <strong>Salvar</strong>.</li>
                         <li>Atualize esta página e tente criar sua conta de novo!</li>
                       </ol>
-                      <p className="text-[11px] mt-1 bg-amber-100 text-amber-950 p-2 rounded-lg font-semibold">
-                        💡 Dica: Você pode clicar no botão verde <strong className="text-emerald-800 font-bold">"Usar Conta Demo"</strong> abaixo para ignorar e testar o painel completo instantaneamente sem precisar configurar nada!
-                      </p>
                     </div>
                   ) : language === "es" ? (
                     <div className="space-y-1.5 text-slate-600 font-medium leading-relaxed">
@@ -355,9 +341,6 @@ export default function App() {
                         <li>Seleccione <strong>Email/Password</strong>, active la casilla y haga clic en <strong>Guardar</strong>.</li>
                         <li>¡Refresque esta página e intente registrarse de nuevo!</li>
                       </ol>
-                      <p className="text-[11px] mt-1 bg-amber-100 text-amber-950 p-2 rounded-lg font-semibold">
-                        💡 Consejo: ¡Puede hacer clic en el botón verde <strong className="text-emerald-800 font-bold">"Usar Conta Demo"</strong> abajo para omitir y probar el panel completo al instante sin configurar nada!
-                      </p>
                     </div>
                   ) : (
                     <div className="space-y-1.5 text-slate-600 font-medium leading-relaxed">
@@ -370,9 +353,6 @@ export default function App() {
                         <li>Select <strong>Email/Password</strong>, enable the toggle, and click <strong>Save</strong>.</li>
                         <li>Refresh this page and register your account!</li>
                       </ol>
-                      <p className="text-[11px] mt-1 bg-amber-100 text-amber-950 p-2 rounded-lg font-semibold">
-                        💡 Tip: You can click the green <strong className="text-emerald-800 font-bold">"Use Demo Account"</strong> button below to immediately bypass and test the full dashboard without any configuration!
-                      </p>
                     </div>
                   )}
                 </div>
@@ -393,18 +373,16 @@ export default function App() {
                       <p className="mt-2"><strong>Como testar sem limites:</strong></p>
                       <ul className="list-disc list-inside space-y-1 pl-1 text-[11px] text-slate-700">
                         <li>Use o formulário de <strong>E-mail e Senha</strong> abaixo! Ele funciona 100% livre em qualquer domínio ou URL, incluindo localhost e servidores externos.</li>
-                        <li>Ou clique em <strong>"Usar Conta Demo"</strong> no rodapé do formulário para entrar no painel de controle instantaneamente sem precisar preencher dados!</li>
                       </ul>
                     </div>
                   ) : language === "es" ? (
                     <div className="space-y-1.5 text-slate-600 font-medium leading-relaxed">
                       <p className="font-semibold text-slate-900 bg-amber-100/50 p-2.5 rounded-lg border border-amber-200/60">
-                        💡 ¡No se preocupe! Dado que el proyecto Firebase predeterminado pertenece al espacio de trabajo de Google AI Studio, no tiene permiso para cambiar su configuración en la consola. ¡Esto es totalmente normal y esperado!
+                        💡 ¡No se preocupe! Dado que el projeto Firebase predeterminado pertenece al espacio de trabalho de Google AI Studio, no tiene permiso para cambiar su configuración en la consola. ¡Esto es totalmente normal y esperado!
                       </p>
                       <p className="mt-2"><strong>Cómo probar sin límites:</strong></p>
                       <ul className="list-disc list-inside space-y-1 pl-1 text-[11px] text-slate-700">
                         <li>¡Use el inicio de sesión por <strong>Correo y Contraseña</strong> abajo! Funciona 100% libre en cualquier dominio o URL externa.</li>
-                        <li>O haga clic en <strong>"Usar Conta Demo"</strong> al final del formulario para ingresar instantáneamente al panel sin llenar datos.</li>
                       </ul>
                     </div>
                   ) : (
@@ -415,7 +393,6 @@ export default function App() {
                       <p className="mt-2"><strong>How to test freely:</strong></p>
                       <ul className="list-disc list-inside space-y-1 pl-1 text-[11px] text-slate-700">
                         <li>Use the standard <strong>Email & Password</strong> form below! It works 100% unrestricted on any domain, localhost, or custom URLs.</li>
-                        <li>Or click <strong>"Use Demo Account"</strong> at the bottom of the form to bypass credentials and test the dashboard instantly!</li>
                       </ul>
                     </div>
                   )}
