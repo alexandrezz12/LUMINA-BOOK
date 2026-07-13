@@ -1,7 +1,6 @@
 import express from "express";
 import path from "path";
 import dotenv from "dotenv";
-import { createServer as createViteServer } from "vite";
 import Stripe from "stripe";
 
 dotenv.config();
@@ -194,6 +193,7 @@ app.post("/api/calendar/sync", (req, res) => {
 async function startServer() {
   // Vite Integration
   if (process.env.NODE_ENV !== "production") {
+    const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
