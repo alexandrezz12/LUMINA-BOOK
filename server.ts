@@ -18,7 +18,8 @@ function getStripe(): Stripe | null {
     return null;
   }
   if (!stripeClient) {
-    stripeClient = new Stripe(stripeKey);
+    const StripeConstructor = (Stripe as any).default || Stripe;
+    stripeClient = new StripeConstructor(stripeKey);
   }
   return stripeClient;
 }
@@ -193,7 +194,8 @@ app.post("/api/calendar/sync", (req, res) => {
 async function startServer() {
   // Vite Integration
   if (process.env.NODE_ENV !== "production") {
-    const { createServer: createViteServer } = await import("vite");
+    const viteModule = "vite";
+    const { createServer: createViteServer } = await import(viteModule);
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
