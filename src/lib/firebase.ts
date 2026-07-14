@@ -14,8 +14,12 @@ const firebaseConfig = {
 // Initialize app only once
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-// Initialize Firestore with specific databaseId
-const db = getFirestore(app, "ai-studio-ff9d1e97-7ecc-4cb1-b141-38aa1a452884");
+// Initialize Firestore with specific databaseId or fallback
+const dbId = (import.meta as any).env.VITE_FIRESTORE_DATABASE_ID !== undefined
+  ? (import.meta as any).env.VITE_FIRESTORE_DATABASE_ID
+  : "ai-studio-ff9d1e97-7ecc-4cb1-b141-38aa1a452884";
+
+const db = dbId === "(default)" || dbId === "" ? getFirestore(app) : getFirestore(app, dbId);
 
 const auth = getAuth(app);
 

@@ -258,11 +258,6 @@ export default function DashboardView({ userId, userEmail, onSignOut }: Dashboar
   const [googleCalConnected, setGoogleCalConnected] = useState(false);
   const [outlookCalConnected, setOutlookCalConnected] = useState(false);
 
-  // Supabase connection testing states
-  const [isTestingSupabase, setIsTestingSupabase] = useState(false);
-  const [supabaseTestStatus, setSupabaseTestStatus] = useState<'idle' | 'success' | 'error'>('idle');
-  const [supabaseTestMessage, setSupabaseTestMessage] = useState("");
-
   // Dynamic feedback notification toast
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   
@@ -3677,11 +3672,11 @@ export default function DashboardView({ userId, userEmail, onSignOut }: Dashboar
                       </p>
                     </div>
                     <button
-                      onClick={testSupabaseConnection}
-                      disabled={isTestingSupabase}
+                      onClick={handleTestSupabaseConnection}
+                      disabled={testingSupabase}
                       className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white rounded-lg text-[10px] font-bold transition-all disabled:bg-gray-400 flex items-center justify-center gap-1 shrink-0 cursor-pointer"
                     >
-                      {isTestingSupabase ? (
+                      {testingSupabase ? (
                         <>
                           <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                           {bookingLanguage === "pt" ? "Testando..." : bookingLanguage === "es" ? "Probando..." : "Testing..."}
